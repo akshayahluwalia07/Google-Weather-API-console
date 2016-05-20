@@ -1,0 +1,168 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using System.Threading.Tasks;
+using System.Net;
+using Newtonsoft.Json.Linq;
+
+namespace Google_Weather_API
+{
+
+    // This class defines getter and setter properties
+
+    class WeatherProperties
+    {
+        private string city_name;
+        public string name
+        {
+            get {
+                return city_name;
+            }
+            set
+            {
+                city_name = value;
+            }
+        }
+        private string city_description;
+        public string description
+        {
+            get
+            {
+                return city_description;
+            }
+            set
+            {
+                city_description = value;
+            }
+        }
+        private string city_windspeed;
+        public string windspeed
+        {
+            get
+            {
+                return city_windspeed;
+            }
+            set
+            {
+                city_windspeed = value +" "+ "meter/sec";
+            }
+        }
+        private string city_longitude;
+        public string longitude
+        {
+            get
+            {
+                return city_longitude;
+            }
+            set
+            {
+                city_longitude = value;
+            }
+        }
+        private string city_latitude;
+        public string latitude
+        {
+            get
+            {
+                return city_latitude;
+            }
+            set
+            {
+                city_latitude = value;
+            }
+        }
+        private string city_pressure;
+        public string pressure
+        {
+            get
+            {
+                return city_pressure;
+            }
+            set
+            {
+                city_pressure = value + " "+"hpa";
+            }
+        }
+        private string city_humidity;
+        public string humidity
+        {
+            get
+            {
+                return city_humidity;
+            }
+            set
+            {
+                city_humidity = value + "%";
+            }
+        }
+
+        private double city_temperature;
+        public double temperature
+        {
+            get
+            {
+                return city_temperature;
+            }
+            set
+            {
+                city_temperature = (Convert.ToDouble(value) - 273);
+            }
+        }
+    }
+    
+    class googleAPI
+    {
+        public static void Main(string[] args)
+        {
+            // Open a Web Client to make a request to the Google API
+            // Inorder to make a call to google weather API you need an account to get your own api key
+            // This request is made by passing city as a parameter in the url
+            
+            WebClient c = new WebClient();
+            Console.WriteLine("\n\t\t\t\t\t WELCOME TO THE DAILY WEATHER FORECAST AROUND THE GLOBE!!! \n");
+            Console.WriteLine("Please enter a location!\n");
+            String city = Console.ReadLine().ToLower();
+            String url = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=92c78d9896d03728dd26bd3c45ee9731";
+            String data = c.DownloadString(url);
+
+            // We use the JSON.net framework to parse the data 
+            //This framework can be downloaded from this url - http://www.newtonsoft.com/json
+
+            JObject o = JObject.Parse(data);
+
+            // Create an instance of WeahterProperties to set the values
+
+            WeatherProperties wp = new WeatherProperties();
+            wp.name= Convert.ToString((o["name"]));
+            wp.description = Convert.ToString(o["weather"][0]["description"]);
+            wp.windspeed = Convert.ToString(o["wind"]["speed"]);
+            wp.longitude = Convert.ToString(o["coord"]["lon"]);
+            wp.latitude = Convert.ToString(o["coord"]["lat"]);
+            wp.pressure = Convert.ToString(o["main"]["pressure"]);
+            wp.humidity = Convert.ToString(o["main"]["humidity"]);
+            wp.temperature = Convert.ToDouble(o["main"]["temp"]);
+
+            // Print the values of weather api properties based on the city 
+
+            Console.WriteLine("\t\t\t\t\t WELCOME TO "+city.ToUpper()+ " !!! \n");
+            Console.WriteLine(" CITY - "+ wp.name);
+            Console.WriteLine(" DESCRIPTION - " + wp.description);
+            Console.WriteLine(" WINDSPEED - " + wp.windspeed);
+            Console.WriteLine(" LONGITUDE - " + wp.longitude);
+            Console.WriteLine(" LATITUDE - " + wp.latitude);
+            Console.WriteLine(" PRESSURE - " + wp.pressure);
+            Console.WriteLine(" HUMIDITY - " + wp.humidity);
+            Console.WriteLine(" TEMPERATURE - " + wp.temperature + " "+ "Celcius");
+            Console.ReadLine();
+
+        }
+    }
+}
+            
+
+
+   
+
+            
