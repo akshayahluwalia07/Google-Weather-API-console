@@ -1,4 +1,4 @@
-# Google-Weather-API-console
+# Google-Weather-API-README
 This is a web console application that makes a call to Google Weather API to fetch the data and display them in the console.
 The request is made to the google API by specyfying the city name.
 The API returns a JSON object which is parsed using the JSON.net framework.
